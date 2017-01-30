@@ -93,9 +93,8 @@ except OSError:
 	exit()
 
 # convert original file to avi
-subprocess.call('ffmpeg -loglevel error -y -i ' + input_video +
-				' -crf 0 -pix_fmt yuv420p -r ' + str(fps) +
-				' -vf scale=' + str(output_video_width_in_pixels) + ':-1 ' +
+subprocess.call('ffmpeg -loglevel error -y -i ' + input_video + ' ' +
+				' -crf 0 -pix_fmt yuv420p -r ' + str(fps) + ' ' +
 				input_avi, shell=True)
 
 in_file  = open(input_avi,  'rb')
@@ -135,7 +134,8 @@ if not os.path.exists(output_dir): os.mkdir(output_dir)
 # Convert avi to mp4. If you want a different format try changing the output variable's file extension
 # and commenting out the line below that starts with -crf. If that doesn't work you'll be making friends with ffmpeg's many, many options.
 subprocess.call('ffmpeg -loglevel error -y -i ' + output_avi + ' ' +
-				' -crf 18 -pix_fmt yuv420p -vcodec libx264 -acodec aac -r ' + str(fps) +
+				' -crf 18 -pix_fmt yuv420p -vcodec libx264 -acodec aac -r ' + str(fps) + ' ' +
+				' -vf scale=' + str(output_video_width_in_pixels) + ':-1 ' + ' ' +
 				' -t ' + str(output_length) + ' ' +
 				output_video + ' # 2> /dev/null', shell=True)
 
