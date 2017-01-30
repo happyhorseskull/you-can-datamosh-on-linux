@@ -1,6 +1,11 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+# here's the relevant information if you're trying to adapt this into another programming language
+# - convert the video to AVI format
+# - designator for beginning of i-frame:	0x0001B0
+# - designator for the end of every frame type:		0x30306463 (usually referenced as ASCII 00dc)
+
 import os
 import sys
 import subprocess
