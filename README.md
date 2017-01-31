@@ -17,7 +17,7 @@ How to run the program after it's downloaded:
 
 `  $ python3 do_the_mosh.py [video file name]`
   
-The datamoshed video will be in a new directory: moshed_videos/
+The datamoshed video will be in a new directory: `moshed_videos/`
 
 Good luck, friends!
 
@@ -29,7 +29,7 @@ Need videos to datamosh? Head over to Python's pip3 and install youtube-dl.
   
 After that downloading youtube videos is as simple as:
 
-`  $ youtube-dl --format 18 [youtube video url] -o youtube_video.mp4`
+  `$ youtube-dl --format 18 [youtube video url] -o youtube_video.mp4`
 
 But wait, there's more: youtube-dl works with lots of other sites like vimeo and can grab most twitter videos.
 To discover if a site is supported try:
