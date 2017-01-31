@@ -78,8 +78,8 @@ output_video_width_in_pixels = 480		# 480 is Twitter-friendly. Programs get real
 	##      After we're done mucking around with i-frames and p-frames the results are fed to ffmpeg            ##
 	##      which locks in the glitches and makes a twitter-ready video to share with your friends              ##
 	##      After you share about 10 of these you'll either be better friends with them or they'll stop         ##
-	##      acknowledging you and delete you from their social media lifestyle which will                       ##
-	##      then open up slots for all your new good friends who enjoy datamoshing thus giving your peer group  ##
+	##      acknowledging you and delete you from their social media lifestyle. You will then have more         ##
+	##      open slots for all your new good friends who enjoy datamoshing thus giving your peer group          ##
 	##      a common bond and sense of purpose as you continue the journey of life together, forever.           ##
 	##                                                                                                          ##
 	##############################################################################################################
