@@ -105,8 +105,6 @@ subprocess.call('ffmpeg -loglevel error -y -i ' + input_video + ' ' +
 in_file  = open(input_avi,  'rb')
 out_file = open(output_avi, 'wb')
 
-in_file = in_file.read()
-
 # 30306463 (ASCII 00dc) signals the end of a frame
 frames = in_file.split(bytes.fromhex('30306463'))
 
