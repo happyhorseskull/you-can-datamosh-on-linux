@@ -46,6 +46,10 @@ which will show a list of available formats for the video on the page.
 NOTE: If youtube-dl fails to download youtube videos try it on another site before deciding youtube-dl is broken.
 Sometimes youtube makes changes to its video player and it takes the youtube-dl team a few days to catch up.
 
+The pip3 update command will get the most up-to-date version:
+
+`$ pip3 install update youtube-dl`
+
 #
 Apple Macintosh notes
 
