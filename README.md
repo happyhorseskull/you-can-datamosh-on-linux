@@ -1,9 +1,9 @@
-# you-can-datamosh
+# you-can-datamosh-on-Linux
 
 It's a script that makes datamoshing with Python fun and easy.
 
 Hello, friends. If you have Python 3 and ffmpeg installed you can datamosh.
-I've only tested this on Linux so good luck chuck if you're using something else.
+This might work on an Apple Mac but I don't have one to test on so I don't know for sure.
 
 What's a datamosh?
 
@@ -21,15 +21,15 @@ The datamoshed video will be in a new directory: `moshed_videos/`
 
 Good luck, friends!
 
-__________________________________________________________________________________________
+#
 
 Need videos to datamosh? Head over to Python's pip3 and install youtube-dl.
 
 `  $ pip3 install youtube-dl     # you may need to use sudo depending on your system.`
   
-After that downloading youtube videos is as simple as:
+Afterwards downloading youtube videos is as simple as:
 
-  `$ youtube-dl --format 18 [youtube video url] -o youtube_video.mp4`
+`  $ youtube-dl --format 18 [youtube video url] -o youtube_video.mp4`
 
 But wait, there's more: youtube-dl works with lots of other sites like vimeo and can grab most twitter videos.
 To discover if a site is supported try:
@@ -37,3 +37,6 @@ To discover if a site is supported try:
 `  $ youtube-dl --list-formats [website url]`
   
 which will show a list of available formats for the video on the page.
+
+NOTE: If youtube-dl fails to download youtube videos try it on another site before declaring youtube-dl broken.
+Sometimes youtube makes changes to its video player and it takes the youtube-dl team a few days to catch up.
