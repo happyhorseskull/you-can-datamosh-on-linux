@@ -18,7 +18,7 @@ How to run the program after it's downloaded:
   
 The datamoshed video will be in a new directory: `moshed_videos/`
 
-You can most easily reach me on twitter. I am @happyhorseskull there as well.
+You can most easily contact me on twitter. I am @happyhorseskull there as well.
 
 Good luck, friends!
 
