@@ -20,7 +20,8 @@ if not os.path.isfile(sys.argv[1]):
 	exit()
 else:
 	input_video = sys.argv[1]			# We're assuming you gave it a valid video file and not a .txt or whatever.
-										# If you want file validation you'll have to write it yourself.
+							# If you want file validation you'll have to write it yourself.
+# variables
 
 fn = os.path.splitext(os.path.basename(input_video))[0]
 input_avi =  'datamoshing_input.avi'					# must be an AVI so i-frames can be located in binary file
@@ -28,7 +29,6 @@ output_avi = 'datamoshing_output.avi'
 output_dir = 'moshed_videos/'
 output_video = output_dir + 'moshed_' + fn + '.mp4'		# this ensures we won't over-write your original video
 
-# variables
 fps = 25								# The number of frames per second the initial video is converted to before moshing.
 start_sec = 3.1							# Time the effect starts on the original footage's timeline. The output video can be much longer.
 end_sec   = 6.8							# Time the effect ends on the original footage's timeline.
@@ -85,7 +85,8 @@ output_video_width_in_pixels = 480		# 480 is Twitter-friendly. Programs get real
 	##############################################################################################################
 	##############################################################################################################
 
-
+# This is where the magic happens
+	
 # make sure ffmpeg is installed
 try:
 	# pipe output to /dev/null so it doesn't muck up our beautiful command line
@@ -132,6 +133,9 @@ for index, frame in enumerate(frames):
 			# this repeats the p-frame x times
 			for i in range(repeat_p_frames):
 				out_file.write(frame + bytes.fromhex('30306463'))
+
+in_file.close()
+out_file.close()
 
 # make sure the output directory exists
 if not os.path.exists(output_dir): os.mkdir(output_dir)
