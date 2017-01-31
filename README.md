@@ -15,7 +15,7 @@ The mosh works out of the box but I left extensive notes in the program to help 
 
 How to run the program after it's downloaded:
 
-  $ python3 do_the_mosh.py [video file name]
+`  $ python3 do_the_mosh.py [video file name]`
   
 The datamoshed video will be in a new directory: moshed_videos/
 
@@ -25,15 +25,15 @@ ________________________________________________________________________________
 
 Need videos to datamosh? Head over to Python's pip3 and install youtube-dl.
 
-  $ pip3 install youtube-dl     # you may need to use sudo depending on your system.
+`  $ pip3 install youtube-dl     # you may need to use sudo depending on your system.`
   
 After that downloading youtube videos is as simple as:
 
-  $ youtube-dl --format 18 [youtube video url] -o youtube_video.mp4
+`  $ youtube-dl --format 18 [youtube video url] -o youtube_video.mp4`
 
 But wait, there's more: youtube-dl works with lots of other sites like vimeo and can grab most twitter videos.
 To discover if a site is supported try:
 
-  $ youtube-dl --list-formats [website url]
+`  $ youtube-dl --list-formats [website url]`
   
 which will show a list of available formats for the video on the page.
