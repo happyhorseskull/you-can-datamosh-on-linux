@@ -105,8 +105,10 @@ subprocess.call('ffmpeg -loglevel error -y -i ' + input_video + ' ' +
 in_file  = open(input_avi,  'rb')
 out_file = open(output_avi, 'wb')
 
+in_file_bytes = in_file.read()
+
 # 30306463 (ASCII 00dc) signals the end of a frame
-frames = in_file.split(bytes.fromhex('30306463'))
+frames = in_file_bytes.split(bytes.fromhex('30306463'))
 
 # 0001B0 signals the beginning of an i-frame. Additional info: 0001B6 signals a p-frame
 iframe = bytes.fromhex('0001B0')
