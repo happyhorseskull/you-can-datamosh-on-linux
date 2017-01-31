@@ -1,4 +1,4 @@
-# you-can-datamosh-on-GNU/Linux(and-maybe-Apple-Macintosh)
+# you-can-datamosh-on-Linux(and Apple Macintosh, see the notes at the bottom)
 
 Hello, friends! If you have Python 3 and ffmpeg installed you can datamosh!
 
@@ -40,10 +40,15 @@ which will show a list of available formats for the video on the page.
 NOTE: If youtube-dl fails to download youtube videos try it on another site before deciding youtube-dl is broken.
 Sometimes youtube makes changes to its video player and it takes the youtube-dl team a few days to catch up.
 
-#Apple Macintosh notes
+#
+Apple Macintosh notes
 
 If your machine does not have Python 3 installed you can get it from Homebrew.
 
 This page will help you with that http://docs.python-guide.org/en/latest/starting/install3/osx/#install3-osx
 
-Now open `do_the_mosh.py` in a text editor like http://macromates.com/ and change the first line `#!/usr/bin/python3` to `#![wherever py3 is located on your computer]`. If you're not sure where that is try `$ whereis py3` in the Terminal.
+Find where Python3 was installed in the Terminal with `$ whereis py3`
+
+Open `do_the_mosh.py` in a text editor like http://macromates.com/ and change the first line `#!/usr/bin/python3` to `#![wherever py3 is located on your computer]`
+
+Good luck!
