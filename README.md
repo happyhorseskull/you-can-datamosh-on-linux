@@ -59,4 +59,6 @@ Open `do_the_mosh.py` in a text editor like http://macromates.com/ and remove th
 
 (If that doesn't work you may need to find where Py3 was installed with `$ which py3` or maybe `$ which python3`)
 
+Also you'll probably want to get ffmpeg from Homebrew if you don't have it already. Helpful instructions are available here https://trac.ffmpeg.org/wiki/CompilationGuide/MacOSX#ffmpegthroughHomebrew
+
 Good luck!
