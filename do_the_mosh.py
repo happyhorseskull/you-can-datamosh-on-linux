@@ -138,11 +138,12 @@ if not os.path.exists(output_dir): os.mkdir(output_dir)
 
 # Convert avi to mp4. If you want a different format try changing the output variable's file extension
 # and commenting out the line below that starts with -crf. If that doesn't work you'll be making friends with ffmpeg's many, many options.
+# It's normal for ffmpeg to complain a lot about malformed headers if it processes the end of a modified avi.
+# The -t option specifies the duration of the final video and usually helps avoid the malformed headers at the end.
 subprocess.call('ffmpeg -loglevel error -y -i ' + output_avi + ' ' +
 				' -crf 18 -pix_fmt yuv420p -vcodec libx264 -acodec aac -r ' + str(fps) + ' ' +
 				' -vf scale=' + str(output_video_width_in_pixels) + ':-1 ' + ' ' +
-				' -t ' + str(output_length) + ' ' +
-				output_video + ' # 2> /dev/null', shell=True)
+				' -t ' + str(output_length) + ' ' +	output_video, shell=True)
 
 # gets rid of the in-between files so they're not crudding up your system
 os.remove(input_avi)
