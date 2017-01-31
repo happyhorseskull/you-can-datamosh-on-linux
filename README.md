@@ -3,7 +3,8 @@
 It's a script that makes datamoshing with Python fun and easy.
 
 Hello, friends. If you have Python 3 and ffmpeg installed you can datamosh.
-This might work on an Apple Mac but I don't have one to test on so I don't know for sure.
+If you're running this on an Apple Macintosh and installed Python through Homebrew try changing the first line `#!/usr/bin/..` to wherever py3 is located. If you're not sure where that is try the command:
+`$ whereis py3`
 
 What's a datamosh?
 
