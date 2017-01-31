@@ -13,6 +13,12 @@ https://vimeo.com/87545616
 
 The mosh works out of the box but I left extensive notes in the program to help you use it and understand what's happening.
 
+How to run the program after it's downloaded:
+
+  $ python3 do_the_mosh.py [video file name]
+  
+The datamoshed video will be in a new directory: moshed_videos/
+
 Good luck, friends!
 
 __________________________________________________________________________________________
