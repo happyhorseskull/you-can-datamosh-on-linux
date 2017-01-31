@@ -36,7 +36,7 @@ Okay so mp4 files are fun and good but what about GIFs? That is not a problem wi
 
 `ffmpeg -v error -i moshed_videos/moshed_[moshed video file name].mp4 [file name].gif`
 
-Note: the default settings in `do_the_mosh.py` produce 60 second videos which is a bit much for a GIF and you'll want to edit the video output settings down to say 10 seconds or less so when you convert the mp4 you aren't getting 84 MB GIF files that cause many GIF players give up and quit.
+Note: the default settings in `do_the_mosh.py` produce 60 second videos which is a bit much for a GIF and you'll want to edit the video output settings down to say 10 seconds or less so when you convert the mp4 you aren't getting 84 MB GIF files that cause many GIF players give up and quit. ffmpeg offers a trim command which might be real handy https://ffmpeg.org/ffmpeg-filters.html#trim
 
 
 --ADVANCED GIF LEARNING--
