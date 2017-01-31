@@ -11,7 +11,7 @@ Here's an example made by someone who wasn't me!
 
 https://vimeo.com/87545616
 
-The mosh works out of the box but I left extensive notes in program to help you use it.
+The mosh works out of the box but I left extensive notes in the program to help you use it and understand what's happening.
 
 Good luck, friends!
 
