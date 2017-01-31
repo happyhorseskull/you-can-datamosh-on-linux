@@ -18,6 +18,9 @@ Good luck, friends!
 __________________________________________________________________________________________
 
 Need videos to datamosh? Head over to Python's pip3 and install youtube-dl.
+
+  $ pip3 install youtube-dl     # you may need to use sudo depending on your system.
+  
 After that downloading youtube videos is as simple as:
 
   $ youtube-dl -f 18 [youtube video url] -o youtube_video.mp4
@@ -27,4 +30,4 @@ To discover if a site is supported try:
 
   $ youtube-dl -F [website url]
   
-which show a list of available formats.
+which will show a list of available formats for the video on the page.
