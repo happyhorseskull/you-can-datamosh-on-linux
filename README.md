@@ -1,11 +1,8 @@
-# you-can-datamosh-on-Linux
+# you-can-datamosh-on-GNU/Linux(and-maybe-Apple-Macintosh)
 
-It's a script that makes datamoshing with Python fun and easy.
+Hello, friends! If you have Python 3 and ffmpeg installed you can datamosh!
 
-Hello, friends. If you have Python 3 and ffmpeg installed you can datamosh.
-If you're running this on an Apple Macintosh and installed Python through Homebrew try changing the first line `#!/usr/bin/python3` to wherever py3 is located. If you're not sure where that is try the command:
-
-`$ whereis py3`
+If you're running this on an Apple Macintosh and installed Python 3 through Homebrew try changing the first line `#!/usr/bin/python3` to `#![wherever py3 is located]`. If you're not sure where that is try `$ whereis py3`
 
 What's a datamosh?
 
