@@ -1,4 +1,5 @@
-#### you-can-datamosh-on-Linux (and Apple Macintosh, see the notes at the bottom)
+### you-can-datamosh-on-Linux
+#####(and Apple Macintosh, see the notes at the bottom)
 
 Hello, friends! If you have Python 3 and ffmpeg installed you can datamosh!
 
@@ -25,9 +26,10 @@ Good luck, friends!
 
 #
 
-Editing `do_the_mosh.py` is really easy with a simple code editor like https://atom.io/
+Editing python files is really easy with a simple code editor like https://atom.io/
 
 If your editing session gets wild and you're not sure how to fix the code you can always re-download it from here so fear not!
+
 
 #
 ##### ffmpeg
