@@ -1,4 +1,4 @@
-#### you-can-datamosh-on-Linux (and Apple Macintosh, see the notes at the bottom)
+### you-can-datamosh-on-Linux (and Apple Macintosh, see the notes at the bottom)
 
 
 Hello, friends! If you have Python 3 and ffmpeg installed you can datamosh!
@@ -33,6 +33,8 @@ If your editing session gets wild and you're not sure how to fix the code you ca
 
 #
 ##### ffmpeg
+
+If you don't have ffmpeg already you can find instructions for getting it here: http://ffmpeg.org/download.html
 
 ffmpeg makes it super easy to trim a video:
 
