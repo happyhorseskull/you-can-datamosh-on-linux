@@ -1,5 +1,4 @@
-### you-can-datamosh-on-Linux
-(and Apple Macintosh, see the notes at the bottom)
+#### you-can-datamosh-on-Linux (and Apple Macintosh, see the notes at the bottom)
 
 
 Hello, friends! If you have Python 3 and ffmpeg installed you can datamosh!
