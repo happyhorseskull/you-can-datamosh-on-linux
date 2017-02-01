@@ -13,7 +13,7 @@ https://vimeo.com/87545616
 
 The mosh works out of the box and produces videos ready for social media sites like Twitter but I left extensive notes in the code to help you modify settings and understand what's happening.
 
-How to run the program after it's downloaded:
+How to run the datamosh program:
 
 `$ python3 do_the_mosh.py [video file name]`
   
@@ -28,7 +28,7 @@ Good luck, friends!
 
 Editing python files is really easy with a simple code editor like https://atom.io/
 
-If your editing session gets wild and you're not sure how to fix the code you can always re-download it from here so fear not!
+If your editing session gets wild and you're not sure how to fix the code you can always re-download it from this github page so fear not!
 
 
 #
@@ -44,7 +44,7 @@ ffmpeg makes it super easy to trim a video:
 
 
 #
-##### GIF? GIF!
+##### GIF? GIF! with video_to_gif.py
 
 Okay so MP4 files are fun and good but what about GIFs? That is not a problem with ffmpeg
 
