@@ -42,11 +42,11 @@ GIF? GIF!
 
 Okay so MP4 files are fun and good but what about GIFs? That is not a problem with ffmpeg
 
-`ffmpeg -v error -i [video file name].mp4 [gif file name].gif`
+`$ ffmpeg -v error -i [video file name].mp4 [gif file name].gif`
 
 However the GIFs from that are kinda not that great so I adapted the information from http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html and made `video_to_gif.py` for your high-quality GIF convenience! The command to use it is:
 
-`$ python video_to_gif.py [video file name]`
+`$ python3 video_to_gif.py [video file name]`
 
 Your new GIF will be in the `GIFs` folder as `[original video file name].gif`
 
