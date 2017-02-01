@@ -1,4 +1,4 @@
-## you-can-datamosh-on-Linux (and Apple Macintosh, see the notes at the bottom)
+### you-can-datamosh-on-Linux (and Apple Macintosh, see the notes at the bottom)
 
 Hello, friends! If you have Python 3 and ffmpeg installed you can datamosh!
 
@@ -22,13 +22,15 @@ You can most easily contact me on twitter. I am @happyhorseskull there as well.
 
 Good luck, friends!
 
+
 #
 
 Editing `do_the_mosh.py` is really easy with a simple code editor like https://atom.io/
 
 If your editing session gets wild and you're not sure how to fix the code you can always re-download it from here so fear not!
 
-###### ffmpeg
+
+##### ffmpeg
 
 ffmpeg makes it super easy to trim a video:
 
@@ -36,7 +38,8 @@ ffmpeg makes it super easy to trim a video:
 
 `-ss` says to start copying the original video at 0:30 seconds and `-t` is how many seconds long the video will be which means the new shorter video is a copy of 0:30 through 0:40 of the original video.
 
-###### GIF? GIF!
+
+##### GIF? GIF!
 
 Okay so MP4 files are fun and good but what about GIFs? That is not a problem with ffmpeg
 
@@ -65,7 +68,8 @@ GIFs can become suprisingly large files. If you need to make a GIF smaller besid
 
 Warning: `video_to_gif.py` will overwrite previous GIFs made from the same video file if you leave them in the GIFs directory.
 
-###### pip3
+
+##### pip3
 
 Need videos to datamosh? Head over to Python's pip3 and install youtube-dl.
 
@@ -89,7 +93,8 @@ The pip3 update command will get the most up-to-date version:
 
 `$ pip3 install update youtube-dl`
 
-###### Apple Macintosh notes
+
+##### Apple Macintosh notes
 
 If your machine does not have Python 3 installed you can get it from Homebrew.
 
