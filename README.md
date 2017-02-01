@@ -52,12 +52,18 @@ Your new GIF will be in the `GIFs` folder as `[original video file name].gif`
 
 The current settings in `video_to_gif.py` will copy the first 10 seconds of the video to the GIF. But it it easy to change that. You can either:
 
-- run the file from the command line and specify the start time and length:
-`$ python3 video_to_gif.py [video file name] 10 5`
-which will start at the 10th second and be 5 seconds long
+- run the file from the command line and specify the start time and end time:
+`$ python3 video_to_gif.py [video file name] 10 20`
+which will start at the 10th second and end on the 20th second.
 
 or:
-- you can edit `video_to_gif.py` and change the `start` and `length` variables to be whichever default values you prefer.
+- you can edit `video_to_gif.py` and change the `start_gif` and `end_gif` variables to be whichever default values you prefer.
+
+GIFs can become suprisingly large files. If you need to make a GIF smaller besides making it shorter you can edit the variables in video_to_gif.py
+
+`fps` is frames per second. A lower `fps` will create smaller files.
+
+`gif_width` sets how wide the GIF is. The height will scale to match. A narrower width GIF will be smaller.
 
 Warning: `video_to_gif.py` will overwrite previous GIFs made from the same video file if you leave them in the GIFs directory.
 
