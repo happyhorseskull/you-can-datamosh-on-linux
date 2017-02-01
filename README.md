@@ -63,7 +63,7 @@ However the GIFs from that are kinda not that great so I adapted the information
 
 `$ python3 video_to_gif.py [video file name]`
 
-Your new GIF will be in the `GIFs` folder as `[original video file name].gif` The GIF will only be datamoshed if you convert a datamoshed video. It will work with all sortd of regular, boring videos.
+Your new GIF will be in the `GIFs` folder as `[original video file name].gif` The GIF will only be datamoshed if you convert a datamoshed video. `video_to_gif.py` will work with all sorts of regular, boring videos.
 
 The current settings in `video_to_gif.py` will copy the first 10 seconds of the video to the GIF. But it it easy to change that. You can either:
 
