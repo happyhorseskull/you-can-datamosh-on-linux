@@ -1,6 +1,15 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+
+start_sec = 3							# Time the effect starts on the original footage's timeline. The output video can be much longer.
+end_sec   = 6							# Time the effect ends on the original footage's timeline.
+output_length = 60						# In seconds. ffmpeg also accepts 00:01:00.000 format.
+repeat_p_frames = 15					# If this is set to 0 the result will only contain i-frames. Possibly only a single i-frame.
+output_video_width_in_pixels = 480		# 480 is Twitter-friendly. Programs get real mad if a video is an odd number of pixels wide (or in height).
+fps = 25								# The number of frames per second the initial video is converted to before moshing.
+
+
 # here's the relevant information if you're trying to adapt this into another programming language
 # - convert the video to AVI format
 # - designator for beginning of i-frame:	0x0001B0
@@ -20,21 +29,17 @@ if not os.path.isfile(sys.argv[1]):
 	exit()
 else:
 	input_video = sys.argv[1]			# We're assuming you gave it a valid video file and not a .txt or whatever.
-							# If you want file validation you'll have to write it yourself.
-# variables
-
-fn = os.path.splitext(os.path.basename(input_video))[0]
-input_avi =  'datamoshing_input.avi'					# must be an AVI so i-frames can be located in binary file
-output_avi = 'datamoshing_output.avi'
+										# If you want file validation you'll have to write it yourself.
+# file variables
 output_dir = 'moshed_videos/'
-output_video = output_dir + 'moshed_' + fn + '.mp4'		# this ensures we won't over-write your original video
+# make sure the output directory exists
+if not os.path.exists(output_dir): os.mkdir(output_dir)
+	
+fn = os.path.splitext(os.path.basename(input_video))[0]
+input_avi =  'moshed_videos/' + 'datamoshing_input.avi'		# must be an AVI so i-frames can be located in binary file
+output_avi = 'moshed_videos/' + 'datamoshing_output.avi'
+output_video = output_dir + 'moshed_' + fn + '.mp4'			# this ensures we won't over-write your original video
 
-fps = 25								# The number of frames per second the initial video is converted to before moshing.
-start_sec = 3.1							# Time the effect starts on the original footage's timeline. The output video can be much longer.
-end_sec   = 6.8							# Time the effect ends on the original footage's timeline.
-repeat_p_frames = 15					# If this is set to 0 the result will only contain i-frames. Possibly only a single i-frame.
-output_length = 60						# In seconds. ffmpeg also accepts 00:01:00.000 format.
-output_video_width_in_pixels = 480		# 480 is Twitter-friendly. Programs get real mad if a video is an odd number of pixels wide (or in height).
 
 
 	##############################################################################################################
@@ -136,9 +141,6 @@ for index, frame in enumerate(frames):
 
 in_file.close()
 out_file.close()
-
-# make sure the output directory exists
-if not os.path.exists(output_dir): os.mkdir(output_dir)
 
 # Convert avi to mp4. If you want a different format try changing the output variable's file extension
 # and commenting out the line below that starts with -crf. If that doesn't work you'll be making friends with ffmpeg's many, many options.
