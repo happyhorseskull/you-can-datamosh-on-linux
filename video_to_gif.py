@@ -15,8 +15,6 @@ gif_folder = 'GIFs/'
 if not os.path.exists(gif_folder): os.mkdir(gif_folder)
 gif_file = gif_folder + os.path.splitext(os.path.basename(video))[0] + '.gif'
 
-
-
 # Assigns default values from the start of the file if none given at command line
 if len(sys.argv) > 2: start_time = sys.argv[2]
 else: start_time = start
