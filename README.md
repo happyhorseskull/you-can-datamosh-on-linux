@@ -30,18 +30,36 @@ If your editing session gets wild and you're not sure how to fix the code you ca
 
 #
 
+ffmpeg makes it super easy to trim a video:
+
+`$ ffmpeg -v error -i [original video file name].mp4 -ss 30 -t 10 [new video file name].mp4`
+
+`-ss` says to start copying the original video at 0:30 seconds and `-t` is how many seconds long the video will be which means the new shorter video is a copy of 0:30 through 0:40 of the original video.
+
+#
+
 GIF? GIF!
 
-Okay so mp4 files are fun and good but what about GIFs? That is not a problem with ffmpeg.
+Okay so MP4 files are fun and good but what about GIFs? That is not a problem with ffmpeg
 
-`ffmpeg -v error -i moshed_videos/moshed_[moshed video file name].mp4 [file name].gif`
+`ffmpeg -v error -i [video file name].mp4 [gif file name].gif`
 
-Note: the default settings in `do_the_mosh.py` produce 60 second videos which is a bit much for a GIF and you'll want to edit the video output settings down to say 10 seconds or less so when you convert the mp4 you aren't getting 84 MB GIF files that cause many GIF players give up and quit. ffmpeg offers a trim command which might be real handy https://ffmpeg.org/ffmpeg-filters.html#trim
+However the GIFs from that are kinda not that great so I adapted the information from http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html and made `video_to_gif.py` for your high-quality GIF convenience! The command to use it is:
 
+`$ python video_to_gif.py [video file name]`
 
---ADVANCED GIF LEARNING--
+Your new GIF will be in the `GIFs` folder as `[original video file name].gif`
 
-The results will be okay but if you want to improve the output you'll find ideas here: http://blog.pkh.me/p/21-high-quality-gif-with-ffmpeg.html
+The current settings in `video_to_gif.py` will copy the first 10 seconds of the video to the GIF. But it it easy to change that. You can either:
+
+- run the file from the command line and specify the start time and length:
+`$ python3 video_to_gif.py [video file name] 10 5`
+which will start at the 10th second and be 5 seconds long
+
+or:
+- you can edit `video_to_gif.py` and change the `start` and `length` variables to be whichever default values you prefer.
+
+Warning: `video_to_gif.py` will overwrite previous GIFs made from the same video file if you leave them in the GIFs directory.
 
 #
 
