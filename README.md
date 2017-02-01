@@ -39,7 +39,7 @@ Here are the really important variables in `do_the_mosh.py` for changing the vid
 
 `output_length = 60` How long the final video will be in seconds
 
-`repeat_p_frames = 15` Changes how many times a p-frame is repeated during the datamosh
+`repeat_p_frames = 15` How many times a p-frame is repeated during the datamosh
 
 
 #
