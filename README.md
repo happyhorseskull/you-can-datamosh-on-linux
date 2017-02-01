@@ -31,6 +31,16 @@ Editing python files is really easy with a simple code editor like https://atom.
 
 If your editing session gets wild and you're not sure how to fix the code you can always re-download it from this github page so fear not!
 
+Here are the really important variables in `do_the_mosh.py` for changing the video it creates:
+
+`start_sec = 3` Time the effect starts on the original video's timeline. The final video can be much longer.
+
+`end_sec = 6` Time the effect ends on the original video's timeline.
+
+`output_length = 60` How long the final video will be in seconds
+
+`repeat_p_frames = 15` Changes how many times a p-frame is repeated during the datamosh
+
 
 #
 ##### ffmpeg
