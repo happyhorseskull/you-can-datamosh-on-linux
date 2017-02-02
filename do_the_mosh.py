@@ -48,13 +48,13 @@ def confirm_output_directory(output_directory):
 parser = argparse.ArgumentParser()
 # this makes the options available at the command line for ease of use
 parser.add_argument('input_video', type=quit_if_no_video_file, help="File to be moshed")
-parser.add_argument('--start_sec', default = start_sec, type=int, help="Time the effect starts on the original footage's timeline. The output video can be much longer.")
-parser.add_argument('--end_sec',   default = end_sec, type=int, help="Time the effect ends on the original footage's timeline.")
-parser.add_argument('--output_length', default = output_length, type=int, help="In seconds. ffmpeg also accepts 00:01:00.000 format.")
-parser.add_argument('--repeat_p_frames', default = repeat_p_frames, type=int, help="If this is set to 0 the result will only contain i-frames. Possibly only a single i-frame.")
-parser.add_argument('--output_width', default = output_width, type=int, help="Width of output video in pixels. 480 is Twitter-friendly. Programs get real mad if a video is an odd number of pixels wide.")
-parser.add_argument('--fps', default = fps, type=int, help="The number of frames per second the initial video is converted to before moshing.")
-parser.add_argument('--output_dir', default='moshed_videos', type=confirm_output_directory, help="Output directory")
+parser.add_argument('--start_sec',       default = start_sec,        type=int, help="Time the effect starts on the original footage's timeline. The output video can be much longer.")
+parser.add_argument('--end_sec',         default = end_sec,          type=int, help="Time the effect ends on the original footage's timeline.")
+parser.add_argument('--output_length',   default = output_length,    type=int, help="In seconds. ffmpeg also accepts 00:01:00.000 format.")
+parser.add_argument('--repeat_p_frames', default = repeat_p_frames,  type=int, help="If this is set to 0 the result will only contain i-frames. Possibly only a single i-frame.")
+parser.add_argument('--output_width',    default = output_width,     type=int, help="Width of output video in pixels. 480 is Twitter-friendly. Programs get real mad if a video is an odd number of pixels wide.")
+parser.add_argument('--fps',             default = fps,              type=int, help="The number of frames per second the initial video is converted to before moshing.")
+parser.add_argument('--output_dir',      default = output_directory, type=confirm_output_directory, help="Output directory")
 
 # this makes sure the local variables are up to date after all the argparsing
 locals().update( parser.parse_args().__dict__.items() )
@@ -62,11 +62,15 @@ locals().update( parser.parse_args().__dict__.items() )
 # programs get real mad if a video is an odd number of pixels wide (or in height)
 if output_width % 2 != 0: output_width += 1
 
-if start_sec > end_sec:
-    print("No moshing will occur because --start_sec begins after --end_sec ends.")
-    print("If the part of the video that you want to mosh isn't near the beginning look at README.md on how to use ffmpeg to trim a video.")
-    sys.exit()
-
+if start_sec > output_length or start_sec > end_sec:
+	print("No moshing will occur because --start_sec begins after --end_sec or --output_length.")
+	print("If the part of the video that you want to mosh isn't near the beginning use ffmpeg to trim the video:")
+	print("")
+	print("ffmpeg -v error -i [original video file name].mp4  -ss 30 -to 40 [new video file name].mp4")
+	print("")
+	print("-ss says to start copying the original video at 0:30 seconds and ")
+	print("-to says to stop copying at 0:40 of the original video.")
+	sys.exit()
 
 # where we make new file names
 # basename seperates the file name from the directory it's in so /home/user/you/video.mp4 becomes video.mp4
@@ -198,16 +202,18 @@ os.remove(output_avi)
 	##############################################################################################################
 
 
-########################################################################################################################################
-########################################################################################################################################
-########################################################################################################################################
+######################################################################################################################
+######################################################################################################################
+######################################################################################################################
 
-# the code was adapted from https://github.com/amgadani/Datamosh-python/blob/master/standard.py by @amgadani
-# which was adapted from https://github.com/grampajoe/Autodatamosh/blob/master/autodatamosh.pl by @joefriedl
+     # the code was adapted from https://github.com/amgadani/Datamosh-python/blob/master/standard.py by @amgadani
+     # which was adapted from https://github.com/grampajoe/Autodatamosh/blob/master/autodatamosh.pl by @joefriedl
 
-# Here comes the disclaimer. This code is under the MIT License. 
-# Basically you can include this code in commercial or personal projects and you're welcome to edit the code.
-# If it breaks anything it's not my fault and I don't have to help you fix the work computer you broke while glitching on company time.
-# Also I'm not obligated to help you fix or change the code but if your request is reasonable I probably will.
+     # Here comes the disclaimer. This code is under the MIT License. 
+     # Basically you can include this code in commercial or personal projects and you're welcome to edit the code.
+     # If it breaks anything it's not my fault and I don't have to help you fix the work computer you broke while 
+     # glitching on company time.
+     # Also I'm not obligated to help you fix or change the code but if your request is reasonable I probably will.
+     # For instance, demanding that I program the next Facebook for free would be an unreasonable request.
 
 
