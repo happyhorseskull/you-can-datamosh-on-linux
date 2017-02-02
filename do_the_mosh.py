@@ -1,44 +1,45 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+import os
+import subprocess
+from argparse import ArgumentParser, ArgumentTypeError
+
+def bail_on_notfile(path):
+        '''Validator for file existence for use in argparsing'''
+        if not os.path.isfile(path):
+                raise ArgumentTypeError("Couldn't find {}. You might want to check the file name??".format(path))
+        else:
+                return path
 
 
-start_sec = 3							# Time the effect starts on the original footage's timeline. The output video can be much longer.
-end_sec   = 6							# Time the effect ends on the original footage's timeline.
-output_length = 60						# In seconds. ffmpeg also accepts 00:01:00.000 format.
-repeat_p_frames = 15					# If this is set to 0 the result will only contain i-frames. Possibly only a single i-frame.
-output_video_width_in_pixels = 480		# 480 is Twitter-friendly. Programs get real mad if a video is an odd number of pixels wide (or in height).
-fps = 25								# The number of frames per second the initial video is converted to before moshing.
+def mkdir_p(path):
+        '''Checks if output dir exists, creates if not, for use in argparsing'''
+        if not os.path.exists(path): os.mkdir(path)
+        return path
 
+parser = ArgumentParser()
+parser.add_argument('input_video', type=bail_on_notfile, help="File to be moshed")
+parser.add_argument('--start_sec', default = 3, type=int, help="Time the effect starts on the original footage's timeline. The output video can be much longer.")
+parser.add_argument('--end_sec', default = 6, type=int, help="Time the effect ends on the original footage's timeline.")
+parser.add_argument('--output_length', default = 60, type=int, help="In seconds. ffmpeg also accepts 00:01:00.000 format. # TODO regex matching here")
+parser.add_argument('--repeat_p_frames', default = 15, type=int, help="If this is set to 0 the result will only contain i-frames. Possibly only a single i-frame.")
+parser.add_argument('--output_width', default = 480, type=int, help="Width of output video in pixels. 480 is Twitter-friendly. Programs get real mad if a video is an odd number of pixels wide (or in height).")
+parser.add_argument('--fps', default = 25, type=int, help="The number of frames per second the initial video is converted to before moshing.")
+parser.add_argument('--output_dir', default='moshed_videos', type=mkdir_p, help='Output directory')
+
+args = parser.parse_args()
+locals().update(args.__dict__.items()) # this is bad practice but soooooo sweetly succinct sorry not sorry
 
 # here's the relevant information if you're trying to adapt this into another programming language
 # - convert the video to AVI format
 # - designator for beginning of i-frame:	0x0001B0
 # - designator for the end of every frame type:		0x30306463 (usually referenced as ASCII 00dc)
 
-import os
-import sys
-import subprocess
-
-# make sure a video was included at command line
-if len(sys.argv) < 2:
-	print("Please include a video to be datamoshed.")
-	exit()
-
-if not os.path.isfile(sys.argv[1]):
-	print("Couldn't find that video file. You might want to check the file name??")
-	exit()
-else:
-	input_video = sys.argv[1]			# We're assuming you gave it a valid video file and not a .txt or whatever.
-										# If you want file validation you'll have to write it yourself.
-# file variables
-output_dir = 'moshed_videos/'
-# make sure the output directory exists
-if not os.path.exists(output_dir): os.mkdir(output_dir)
-	
+# derived file variables
 fn = os.path.splitext(os.path.basename(input_video))[0]
-input_avi =  'moshed_videos/' + 'datamoshing_input.avi'		# must be an AVI so i-frames can be located in binary file
-output_avi = 'moshed_videos/' + 'datamoshing_output.avi'
-output_video = output_dir + 'moshed_' + fn + '.mp4'			# this ensures we won't over-write your original video
+input_avi =  os.path.join(output_dir, 'datamoshing_input.avi')		# must be an AVI so i-frames can be located in binary file
+output_avi = os.path.join(output_dir, 'datamoshing_output.avi')
+output_video = os.path.join(output_dir, 'moshed_{}.mp4'.format(fn))			# this ensures we won't over-write your original video
 
 
 
@@ -91,7 +92,7 @@ output_video = output_dir + 'moshed_' + fn + '.mp4'			# this ensures we won't ov
 	##############################################################################################################
 
 # This is where the magic happens
-	
+
 # make sure ffmpeg is installed
 try:
 	# pipe output to /dev/null so it doesn't muck up our beautiful command line
@@ -148,7 +149,7 @@ out_file.close()
 # The -t option specifies the duration of the final video and usually helps avoid the malformed headers at the end.
 subprocess.call('ffmpeg -loglevel error -y -i ' + output_avi + ' ' +
 				' -crf 18 -pix_fmt yuv420p -vcodec libx264 -acodec aac -r ' + str(fps) + ' ' +
-				' -vf "scale=' + str(output_video_width_in_pixels) + ':-2:flags=lanczos" ' + ' ' +
+				' -vf "scale=' + str(output_width) + ':-2:flags=lanczos" ' + ' ' +
 				' -t ' + str(output_length) + ' ' +	output_video, shell=True)
 
 # gets rid of the in-between files so they're not crudding up your system
