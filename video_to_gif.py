@@ -1,35 +1,38 @@
 import os
+from argparse import ArgumentParser
 import sys
 import subprocess
 
-start_gif = 0
-end_gif = 10
+def bail_on_notfile(path):
+        '''Validator for file existence for use in argparsing'''
+        if not os.path.isfile(path):
+                raise ArgumentTypeError("Couldn't find {}. You might want to check the file name??".format(path))
+        else:
+                return path
 
-fps = 15
-gif_width = 480
+def mkdir_p(path):
+        '''Checks if output dir exists, creates if not, for use in argparsing'''
+        if not os.path.exists(path): os.mkdir(path)
+        return path
 
-if len(sys.argv) < 2:
-	print("Please provide a video file name. Additionally you can include the start and end times " +
-		  "from the video for the GIF to copy.")
-	exit()
+parser = ArgumentParser()
+parser.add_argument('video', type = bail_on_notfile, help = 'Video to be GIFarrooed')
+parser.add_argument('start_time', type=float, nargs = '?', default = 0.0, help='start time')
+parser.add_argument('end_time', type=float, nargs = '?', default = 10.0, help='end time')
 
-video = sys.argv[1]
-gif_folder = 'GIFs/'
-if not os.path.exists(gif_folder): os.mkdir(gif_folder)
-gif_file = gif_folder + os.path.splitext(os.path.basename(video))[0] + '.gif'
+parser.add_argument('--gif_folder', default='GIFS', type=mkdir_p, help='Folder for gif')
+parser.add_argument('--fps', default = 15, help='Frames per second')
+parser.add_argument('--gif_width', default = 480, help='GIF width in pixels')
 
+args = parser.parse_args()
+locals().update(args.__dict__.items()) # still bad practice, still gonna do it, muah ha ha ha ha
 
+gif_file = os.path.join(gif_folder, os.path.splitext(os.path.basename(video))[0] + '.gif')
 
-# Assigns default values from the start of the file if none given at command line
-if len(sys.argv) > 2: start_time = sys.argv[2]
-else: start_time = start_gif
-
-
-if len(sys.argv) > 3: duration = float(sys.argv[3]) - float(start_time)
-else: duration = float(start_time) + float(end_gif)
+duration = float(start_time) + float(end_time)
 
 filters = 'fps=' + str(fps) + ',scale=' + str(gif_width) + ':-2:flags=lanczos'
-palette = gif_folder + 'palette.png'
+palette = os.path.join(gif_folder, 'palette.png')
 
 # the first run generates a global palette of 256 colors that will be used for every frame
 
