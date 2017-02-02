@@ -1,46 +1,152 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
+start_sec = 3
+end_sec   = 6
+output_length   = 60
+repeat_p_frames = 15
+output_width = 480
+fps = 25
+
+output_directory = 'moshed_videos'
+
+
+		# here's the useful information if you're trying to adapt this into another programming language
+		# - convert the video to AVI format
+		# - designator for beginning of an i-frame:	0x0001B0
+		# - designator for the end of every frame type:		0x30306463 (usually referenced as ASCII 00dc)
+
+
+# now we get everything set up to make the video file
+
+# import makes other people's code libraries available to use in this code
+import sys
+
+# This program was written for Python 3. Python 2 is similar but there are differences and this code won't work with it.
+# the argparse code library wasn't included in Python before 3.2 so those previous versions aren't supported.
+# If you're stuck with an older version of Python3 you could probably delete all the argparse stuff and it would work 
+# but the program would be less convenient to use
+if sys.version_info[0] != 3 or sys.version_info[1] < 2:
+	print('This version works with Python version 3.2 and above but not Python 2, sorry!')
+	sys.exit()
+
 import os
+import argparse
 import subprocess
-from argparse import ArgumentParser, ArgumentTypeError
 
-def bail_on_notfile(path):
-        '''Validator for file existence for use in argparsing'''
-        if not os.path.isfile(path):
-                raise ArgumentTypeError("Couldn't find {}. You might want to check the file name??".format(path))
-        else:
-                return path
+# this makes sure the video file exists. It is used below in the 'input_video' argparse
+def quit_if_no_video_file(video_file):
+	if not os.path.isfile(video_file):
+		raise argparse.ArgumentTypeError("Couldn't find {}. You might want to check the file name??".format(video_file))
+	else:
+		return(video_file)
+
+# make sure the output directory exists
+def confirm_output_directory(output_directory):
+	if not os.path.exists(output_directory): os.mkdir(output_directory)
+
+	return(output_directory)
+
+# this makes the command shorter and clearer so it isn't 'argparse.ArgumentParser().add_argument()' below
+parser = argparse.ArgumentParser()
+# this makes the options available at the command line for ease of use
+parser.add_argument('input_video', type=quit_if_no_video_file, help="File to be moshed")
+parser.add_argument('--start_sec', default = start_sec, type=int, help="Time the effect starts on the original footage's timeline. The output video can be much longer.")
+parser.add_argument('--end_sec',   default = end_sec, type=int, help="Time the effect ends on the original footage's timeline.")
+parser.add_argument('--output_length', default = output_length, type=int, help="In seconds. ffmpeg also accepts 00:01:00.000 format.")
+parser.add_argument('--repeat_p_frames', default = repeat_p_frames, type=int, help="If this is set to 0 the result will only contain i-frames. Possibly only a single i-frame.")
+parser.add_argument('--output_width', default = output_width, type=int, help="Width of output video in pixels. 480 is Twitter-friendly. Programs get real mad if a video is an odd number of pixels wide.")
+parser.add_argument('--fps', default = fps, type=int, help="The number of frames per second the initial video is converted to before moshing.")
+parser.add_argument('--output_dir', default='moshed_videos', type=confirm_output_directory, help="Output directory")
+
+# this makes sure the local variables are up to date after all the argparsing
+locals().update( parser.parse_args().__dict__.items() )
+
+# programs get real mad if a video is an odd number of pixels wide (or in height)
+if output_width % 2 != 0: output_width += 1
+
+if start_sec > end_sec:
+    print("No moshing will occur because --start_sec begins after --end_sec ends.")
+    print("If the part of the video that you want to mosh isn't near the beginning look at README.md on how to use ffmpeg to trim a video.")
+    sys.exit()
 
 
-def mkdir_p(path):
-        '''Checks if output dir exists, creates if not, for use in argparsing'''
-        if not os.path.exists(path): os.mkdir(path)
-        return path
-
-parser = ArgumentParser()
-parser.add_argument('input_video', type=bail_on_notfile, help="File to be moshed")
-parser.add_argument('--start_sec', default = 3, type=int, help="Time the effect starts on the original footage's timeline. The output video can be much longer.")
-parser.add_argument('--end_sec', default = 6, type=int, help="Time the effect ends on the original footage's timeline.")
-parser.add_argument('--output_length', default = 60, type=int, help="In seconds. ffmpeg also accepts 00:01:00.000 format. # TODO regex matching here")
-parser.add_argument('--repeat_p_frames', default = 15, type=int, help="If this is set to 0 the result will only contain i-frames. Possibly only a single i-frame.")
-parser.add_argument('--output_width', default = 480, type=int, help="Width of output video in pixels. 480 is Twitter-friendly. Programs get real mad if a video is an odd number of pixels wide (or in height).")
-parser.add_argument('--fps', default = 25, type=int, help="The number of frames per second the initial video is converted to before moshing.")
-parser.add_argument('--output_dir', default='moshed_videos', type=mkdir_p, help='Output directory')
-
-args = parser.parse_args()
-locals().update(args.__dict__.items()) # this is bad practice but soooooo sweetly succinct sorry not sorry
-
-# here's the relevant information if you're trying to adapt this into another programming language
-# - convert the video to AVI format
-# - designator for beginning of i-frame:	0x0001B0
-# - designator for the end of every frame type:		0x30306463 (usually referenced as ASCII 00dc)
-
-# derived file variables
-fn = os.path.splitext(os.path.basename(input_video))[0]
-input_avi =  os.path.join(output_dir, 'datamoshing_input.avi')		# must be an AVI so i-frames can be located in binary file
+# where we make new file names
+# basename seperates the file name from the directory it's in so /home/user/you/video.mp4 becomes video.mp4
+# splitext short for "split extension" splits video.mp4 into a list ['video','.mp4'] and [0] returns 'video' to file_name
+file_name = os.path.splitext( os.path.basename(input_video) )[0]
+# path.join pushes the directory and file name together and makes sure there's a / between them
+input_avi =  os.path.join(output_dir, 'datamoshing_input.avi')			# must be an AVI so i-frames can be located in binary file
 output_avi = os.path.join(output_dir, 'datamoshing_output.avi')
-output_video = os.path.join(output_dir, 'moshed_{}.mp4'.format(fn))			# this ensures we won't over-write your original video
+# {} is where 'file_name' is put when making the 'output_video' variable
+output_video = os.path.join(output_dir, 'moshed_{}.mp4'.format(file_name))		# this ensures we won't over-write your original video
 
+
+# THIS IS WHERE THE MAGIC HAPPENS
+
+# make sure ffmpeg is installed
+try:
+	# sends command line output to /dev/null when trying to open ffmpeg so it doesn't muck up our beautiful command line
+	null = open("/dev/null", "w")
+	# it tries to open ffmpeg
+	subprocess.Popen("ffmpeg", stdout=null, stderr=null)
+	# politely closes /dev/null
+	null.close()
+
+# if the OS can't find ffmpeg an error is printed and the program quits
+except OSError:
+	print("ffmpeg was not found. Please install it. Thanks.")
+	sys.exit()
+
+# convert original file to avi
+subprocess.call('ffmpeg -loglevel error -y -i ' + input_video + ' ' +
+				' -crf 0 -pix_fmt yuv420p -r ' + str(fps) + ' ' +
+				input_avi, shell=True)
+
+# open up the new files so we can read and write bytes to them
+in_file  = open(input_avi,  'rb')
+out_file = open(output_avi, 'wb')
+
+# because we used 'rb' above when the file is read the output is in byte format instead of Unicode strings
+in_file_bytes = in_file.read()
+
+# 0x30306463 which is ASCII 00dc signals the end of a frame. '0x' is a common way to say that a number is in hexidecimal format.
+frames = in_file_bytes.split(bytes.fromhex('30306463'))
+
+# 0x0001B0 signals the beginning of an i-frame. Additional info: 0x0001B6 signals a p-frame
+iframe = bytes.fromhex('0001B0')
+
+# We want at least one i-frame before the glitching starts
+i_frame_yet = False
+
+for index, frame in enumerate(frames):
+
+	if  i_frame_yet == False or index < int(start_sec * fps) or index > int(end_sec * fps):
+		# the split above removed the end of frame signal so we put it back in
+		out_file.write(frame + bytes.fromhex('30306463'))
+
+		# found an i-frame, let the glitching begin
+		if frame[5:8] == iframe: i_frame_yet = True
+
+	else:
+		# while we're moshing we're repeating p-frames and multiplying i-frames
+		if frame[5:8] != iframe:
+			# this repeats the p-frame x times
+			for i in range(repeat_p_frames):
+				out_file.write(frame + bytes.fromhex('30306463'))
+
+in_file.close()
+out_file.close()
+
+# Convert avi to mp4. If you want a different format try changing the output variable's file extension
+# and commenting out the line that starts with -crf. If that doesn't work you'll be making friends with ffmpeg's many, many options.
+# It's normal for ffmpeg to complain a lot about malformed headers if it processes the end of a datamoshed avi.
+# The -t option specifies the duration of the final video and usually helps avoid the malformed headers at the end.
+subprocess.call('ffmpeg -loglevel error -y -i ' + output_avi + ' ' +
+				' -crf 18 -pix_fmt yuv420p -vcodec libx264 -acodec aac -r ' + str(fps) + ' ' +
+				' -vf "scale=' + str(output_width) + ':-2:flags=lanczos" ' + ' ' +
+				' -t ' + str(output_length) + ' ' +	output_video, shell=True)
+
+# gets rid of the in-between files so they're not crudding up your system
+os.remove(input_avi)
+os.remove(output_avi)
 
 
 	##############################################################################################################
@@ -49,8 +155,8 @@ output_video = os.path.join(output_dir, 'moshed_{}.mp4'.format(fn))			# this ens
 	##                                              A bit of explanation                                        ##
 	##                                                                                                          ##
 	##      Datamoshing is a time honored glitching technique discovered by a hero of another era               ##
-	##      or perhaps a god. We'll never know who they were but they're probably really old right now so       ##
-	##      say a prayer for them in your heart. Also consider donating your youthful blood to them so they     ##
+	##      or perhaps a god. We'll never know who they were but they're probably really old now so             ##
+	##      say a prayer for them in your heart. Also consider donating your youthful blood so they             ##
 	##      can live forever on Peter Thiel's seastead paradise which is totally a good idea and not the        ##
 	##      crackpot idea of a sheltered, solipsistic man with access to billions of other people's dollars.    ##
 	##                                                                                                          ##
@@ -91,100 +197,17 @@ output_video = os.path.join(output_dir, 'moshed_{}.mp4'.format(fn))			# this ens
 	##############################################################################################################
 	##############################################################################################################
 
-# This is where the magic happens
 
-# make sure ffmpeg is installed
-try:
-	# pipe output to /dev/null so it doesn't muck up our beautiful command line
-	null = open("/dev/null", "w")
-	subprocess.Popen("ffmpeg", stdout=null, stderr=null)
-	null.close()
-
-except OSError:
-	print("ffmpeg was not found. Please install it. Thanks.")
-	exit()
-
-# convert original file to avi
-subprocess.call('ffmpeg -loglevel error -y -i ' + input_video + ' ' +
-				' -crf 0 -pix_fmt yuv420p -r ' + str(fps) + ' ' +
-				input_avi, shell=True)
-
-in_file  = open(input_avi,  'rb')
-out_file = open(output_avi, 'wb')
-
-in_file_bytes = in_file.read()
-
-# 30306463 (ASCII 00dc) signals the end of a frame
-frames = in_file_bytes.split(bytes.fromhex('30306463'))
-
-# 0001B0 signals the beginning of an i-frame. Additional info: 0001B6 signals a p-frame
-iframe = bytes.fromhex('0001B0')
-
-# We want at least one i-frame before the glitching starts
-i_frame_yet = False
-
-for index, frame in enumerate(frames):
-
-	if  i_frame_yet == False or index < int(start_sec * fps) or index > int(end_sec * fps):
-
-		# the split above removed the end of frame signal so we put it back in
-		out_file.write(frame + bytes.fromhex('30306463'))
-
-		# found an i-frame, let the glitching begin
-		if frame[5:8] == iframe: i_frame_yet = True
-
-	else:
-		# if it's not an i-frame it's a p-frame
-		if frame[5:8] != iframe:
-			# this repeats the p-frame x times
-			for i in range(repeat_p_frames):
-				out_file.write(frame + bytes.fromhex('30306463'))
-
-in_file.close()
-out_file.close()
-
-# Convert avi to mp4. If you want a different format try changing the output variable's file extension
-# and commenting out the line below that starts with -crf. If that doesn't work you'll be making friends with ffmpeg's many, many options.
-# It's normal for ffmpeg to complain a lot about malformed headers if it processes the end of a modified avi.
-# The -t option specifies the duration of the final video and usually helps avoid the malformed headers at the end.
-subprocess.call('ffmpeg -loglevel error -y -i ' + output_avi + ' ' +
-				' -crf 18 -pix_fmt yuv420p -vcodec libx264 -acodec aac -r ' + str(fps) + ' ' +
-				' -vf "scale=' + str(output_width) + ':-2:flags=lanczos" ' + ' ' +
-				' -t ' + str(output_length) + ' ' +	output_video, shell=True)
-
-# gets rid of the in-between files so they're not crudding up your system
-os.remove(input_avi)
-os.remove(output_avi)
-
-
-############################################################################################################################################
-############################################################################################################################################
-############################################################################################################################################
+########################################################################################################################################
+########################################################################################################################################
+########################################################################################################################################
 
 # the code was adapted from https://github.com/amgadani/Datamosh-python/blob/master/standard.py by @amgadani
 # which was adapted from https://github.com/grampajoe/Autodatamosh/blob/master/autodatamosh.pl by @joefriedl
 
-# Here comes the disclaimer. Basically you can include this code in commercial or personal projects and you're welcome to edit the code.
+# Here comes the disclaimer. This code is under the MIT License. 
+# Basically you can include this code in commercial or personal projects and you're welcome to edit the code.
 # If it breaks anything it's not my fault and I don't have to help you fix the work computer you broke while glitching on company time.
 # Also I'm not obligated to help you fix or change the code but if your request is reasonable I probably will.
 
-############################################################################################################################################
-############################################################################################################################################
-##                                                                                                                                        ##
-##      Copyright <2017-ish> <happyhorseskull enterprises, a totally real organization that wasn't made up to fill in a blank>            ##
-##                                                                                                                                        ##
-##      Permission is hereby granted, free of charge, to any person obtaining a copy of this                                              ##
-##      software and associated documentation files (the "Software"), to deal in the Software                                             ##
-##      without restriction, including without limitation the rights to use, copy, modify, merge,                                         ##
-##      publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons                                        ##
-##      to whom the Software is furnished to do so, subject to the following conditions:                                                  ##
-##                                                                                                                                        ##
-##      The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.    ##
-##                                                                                                                                        ##
-##      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES   ##
-##      OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE   ##
-##      LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR    ##
-##      IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                                                     ##
-##                                                                                                                                        ##
-############################################################################################################################################
-############################################################################################################################################
+
