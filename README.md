@@ -121,7 +121,7 @@ If your machine does not have Python 3 installed you can get it from Homebrew.
 
 This page will help you with that http://docs.python-guide.org/en/latest/starting/install3/osx/#install3-osx
 
-Open `do_the_mosh.py` in a text editor like http://macromates.com/ and remove the first line `#!/usr/bin/python3` then you can run it with:
+Then you can run it with:
 
 `$ py3 do_the_mosh.py`
 
