@@ -15,7 +15,12 @@ The mosh works out of the box and produces videos ready for social media sites l
 How to run the datamosh program:
 
 `$ python3 do_the_mosh.py [video file name]`
-  
+ 
+You can see command line options with:
+
+`$ python3 do_the_mosh.py --help`
+
+
 The datamoshed video will be in a new directory: `moshed_videos/`
 
 You can most easily contact me on twitter. I am @happyhorseskull there as well.
@@ -47,9 +52,9 @@ If you don't have ffmpeg already you can find instructions for getting it here: 
 
 ffmpeg makes it super easy to trim a video:
 
-`$ ffmpeg -v error -i [original video file name].mp4 -ss 30 -t 10 [new video file name].mp4`
+`$ ffmpeg -v error -i [original video file name].mp4 -ss 30 -to 10 [new video file name].mp4`
 
-`-ss` says to start copying the original video at 0:30 seconds and `-t` is how many seconds long the video will be which means the new shorter video is a copy of 0:30 through 0:40 of the original video.
+`-ss` says to start copying the original video at 0:30 seconds and `-t` is when to stop recording which means the new shorter video is a copy of 0:30 through 0:40 of the original video.
 
 
 #
