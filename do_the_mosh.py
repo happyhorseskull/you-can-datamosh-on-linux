@@ -11,8 +11,8 @@ output_directory = 'moshed_videos'
 
 		# here's the useful information if you're trying to adapt this into another programming language
 		# - convert the video to AVI format
-		# - designator for beginning of an i-frame:	0x0001B0
-		# - designator for the end of every frame type:		0x30306463 (usually referenced as ASCII 00dc)
+		# - designator for beginning of an i-frame: 0x0001B0
+		# - designator for the end of every frame type: 0x30306463 (usually referenced as ASCII 00dc)
 
 
 # now we get everything set up to make the video file
@@ -45,14 +45,15 @@ def confirm_output_directory(output_directory):
 
 	return(output_directory)
 
-# parser = argparse.ArgumentParser() is shorter and clearer so the below add_argument commands aren't 'argparse.ArgumentParser().add_argument()'
+# 'parser = argparse.ArgumentParser()' makes the 'parser.add_argument()' function name 
+# shorter than 'argparse.ArgumentParser().add_argument()'
 parser = argparse.ArgumentParser()
 # this makes the options available at the command line for ease of use
 parser.add_argument('input_video', type=quit_if_no_video_file, help="File to be moshed")
 parser.add_argument('--start_sec',        default = start_sec,        type=float, help="Time the video starts on the original footage's timeline. Trims preceding footage.")
-parser.add_argument('--start_effect_sec', default = start_effect_sec, type=float, help="Time the effect starts on the original footage's timeline. The output video can be much longer.")
-parser.add_argument('--end_effect_sec',   default = end_effect_sec,   type=float, help="Time the effect ends on the original footage's timeline.")
-parser.add_argument('--end_sec',    	  default = end_sec,          type=float, help="Time on the original footage's time when it is cut.")
+parser.add_argument('--end_sec',    	  default = end_sec,          type=float, help="Time on the original footage's time when it is trimmed.")
+parser.add_argument('--start_effect_sec', default = start_effect_sec, type=float, help="Time the effect starts on the trimmed footage's timeline. The output video can be much longer.")
+parser.add_argument('--end_effect_sec',   default = end_effect_sec,   type=float, help="Time the effect ends on the trimmed footage's timeline.")
 parser.add_argument('--repeat_p_frames',  default = repeat_p_frames,  type=int,   help="If this is set to 0 the result will only contain i-frames. Possibly only a single i-frame.")
 parser.add_argument('--output_width',     default = output_width,     type=int,   help="Width of output video in pixels. 480 is Twitter-friendly. Programs get real mad if a video is an odd number of pixels wide.")
 parser.add_argument('--fps',              default = fps,              type=int,   help="The number of frames per second the initial video is converted to before moshing.")
