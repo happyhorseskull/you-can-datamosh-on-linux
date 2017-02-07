@@ -45,10 +45,12 @@ def confirm_output_directory(output_directory):
 
 	return(output_directory)
 
-# 'parser = argparse.ArgumentParser()' makes the 'parser.add_argument()' function name 
-# shorter than 'argparse.ArgumentParser().add_argument()'
-parser = argparse.ArgumentParser()
 # this makes the options available at the command line for ease of use
+
+# 'parser' is the name of our new parser which checks the variables we give it to make sure they will probably work 
+# or else offer helpful errors and tips to the user at the command line
+parser = argparse.ArgumentParser() 
+
 parser.add_argument('input_video', type=quit_if_no_video_file, help="File to be moshed")
 parser.add_argument('--start_sec',        default = start_sec,        type=float, help="Time the video starts on the original footage's timeline. Trims preceding footage.")
 parser.add_argument('--end_sec',    	  default = end_sec,          type=float, help="Time on the original footage's time when it is trimmed.")
