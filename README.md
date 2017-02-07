@@ -2,7 +2,7 @@
 #### you-can-datamosh-on-Linux (and Apple Macintosh, see the notes at the bottom)
 #
 
-Hello, friends! If you have Python 3 and ffmpeg installed you can datamosh!
+Hello, friends! If you have Python 3 and ffmpeg installed you can datamosh! If you don't have ffmpeg there are instructions for getting it here: http://ffmpeg.org/download.html
 
 What's a datamosh?
 
@@ -20,7 +20,6 @@ You can see command line options with:
 
 `$ python3 do_the_mosh.py --help`
 
-
 The datamoshed video will be in a new directory: `moshed_videos/`
 
 You can most easily contact me on twitter. I am @happyhorseskull there as well.
@@ -36,25 +35,15 @@ If your editing session gets wild and you're not sure how to fix the code you ca
 
 Here are the really important variables in `do_the_mosh.py` for changing the video it creates:
 
-`start_sec = 3` Time the effect starts on the original video's timeline. The final video can be much longer.
+start_sec: Time the video starts on original footage's timeline. Footage trimmed up to start_sec
 
-`end_sec = 6` Time the effect ends on the original video's timeline.
+end_sec: Time the video ends on original footage's timeline. Footage trimmed after end_sec
 
-`output_length = 60` How long the final video will be in seconds
+start_effect_sec: Time the effect starts on the trimmed footage's timeline.
 
-`repeat_p_frames = 15` How many times a p-frame is repeated during the datamosh
+end_effect_sec: Time the effect ends on the trimmed footage's timeline.
 
-
-#
-##### ffmpeg
-
-If you don't have ffmpeg already you can find instructions for getting it here: http://ffmpeg.org/download.html
-
-ffmpeg makes it super easy to trim a video:
-
-`$ ffmpeg -v error -i [original video file name].mp4 -ss 30 -to 10 [new video file name].mp4`
-
-`-ss` says to start copying the original video at 0:30 seconds and `-t` is when to stop recording which means the new shorter video is a copy of 0:30 through 0:40 of the original video.
+repeat_p_frames: If this is set to 0 the result will only contain i-frames. Possibly only a single i-frame.
 
 
 #
