@@ -1,6 +1,7 @@
-start_sec = 3
-end_sec   = 6
-output_length   = 60
+start_sec = 0
+start_effect_sec = 3
+end_effect_sec   = 6
+end_sec = 60
 repeat_p_frames = 15
 output_width = 480
 fps = 25
@@ -44,17 +45,18 @@ def confirm_output_directory(output_directory):
 
 	return(output_directory)
 
-# this makes the command shorter and clearer so it isn't 'argparse.ArgumentParser().add_argument()' below
+# parser = argparse.ArgumentParser() is shorter and clearer so the below add_argument commands aren't 'argparse.ArgumentParser().add_argument()'
 parser = argparse.ArgumentParser()
 # this makes the options available at the command line for ease of use
 parser.add_argument('input_video', type=quit_if_no_video_file, help="File to be moshed")
-parser.add_argument('--start_sec',       default = start_sec,        type=int, help="Time the effect starts on the original footage's timeline. The output video can be much longer.")
-parser.add_argument('--end_sec',         default = end_sec,          type=int, help="Time the effect ends on the original footage's timeline.")
-parser.add_argument('--output_length',   default = output_length,    type=int, help="In seconds. ffmpeg also accepts 00:01:00.000 format.")
-parser.add_argument('--repeat_p_frames', default = repeat_p_frames,  type=int, help="If this is set to 0 the result will only contain i-frames. Possibly only a single i-frame.")
-parser.add_argument('--output_width',    default = output_width,     type=int, help="Width of output video in pixels. 480 is Twitter-friendly. Programs get real mad if a video is an odd number of pixels wide.")
-parser.add_argument('--fps',             default = fps,              type=int, help="The number of frames per second the initial video is converted to before moshing.")
-parser.add_argument('--output_dir',      default = output_directory, type=confirm_output_directory, help="Output directory")
+parser.add_argument('--start_sec',        default = start_sec,        type=float, help="Time the video starts on the original footage's timeline. Trims preceding footage.")
+parser.add_argument('--start_effect_sec', default = start_effect_sec, type=float, help="Time the effect starts on the original footage's timeline. The output video can be much longer.")
+parser.add_argument('--end_effect_sec',   default = end_effect_sec,   type=float, help="Time the effect ends on the original footage's timeline.")
+parser.add_argument('--end_sec',    	  default = end_sec,          type=float, help="Time on the original footage's time when it is cut.")
+parser.add_argument('--repeat_p_frames',  default = repeat_p_frames,  type=int,   help="If this is set to 0 the result will only contain i-frames. Possibly only a single i-frame.")
+parser.add_argument('--output_width',     default = output_width,     type=int,   help="Width of output video in pixels. 480 is Twitter-friendly. Programs get real mad if a video is an odd number of pixels wide.")
+parser.add_argument('--fps',              default = fps,              type=int,   help="The number of frames per second the initial video is converted to before moshing.")
+parser.add_argument('--output_dir',       default = output_directory, type=confirm_output_directory, help="Output directory")
 
 # this makes sure the local variables are up to date after all the argparsing
 locals().update( parser.parse_args().__dict__.items() )
@@ -62,14 +64,18 @@ locals().update( parser.parse_args().__dict__.items() )
 # programs get real mad if a video is an odd number of pixels wide (or in height)
 if output_width % 2 != 0: output_width += 1
 
-if start_sec > output_length or start_sec > end_sec:
-	print("No moshing will occur because --start_sec begins after --end_sec or --output_length.")
-	print("If the part of the video that you want to mosh isn't near the beginning use ffmpeg to trim the video:")
-	print("")
-	print("ffmpeg -v error -i [original video file name].mp4  -ss 30 -to 40 [new video file name].mp4")
-	print("")
-	print("-ss says to start copying the original video at 0:30 seconds and ")
-	print("-to says to stop copying at 0:40 of the original video.")
+end_effect_hold = end_effect_sec - start_effect_sec
+start_effect_sec = start_effect_sec - start_sec
+
+end_effect_sec = start_effect_sec + end_effect_hold
+
+print('start time from original video: ',str(start_sec))
+print('end time from original video: ',str(end_sec))
+print('mosh effect applied at: ',str(start_effect_sec))
+print('mosh effect stops being applied at: ',str(end_effect_sec))
+
+if start_effect_sec > end_effect_sec:
+	print("No moshing will occur because --start_effect_sec begins after --end_effect_sec")
 	sys.exit()
 
 # where we make new file names
@@ -102,6 +108,7 @@ except OSError:
 # convert original file to avi
 subprocess.call('ffmpeg -loglevel error -y -i ' + input_video + ' ' +
 				' -crf 0 -pix_fmt yuv420p -r ' + str(fps) + ' ' +
+				' -ss ' + str(start_sec) + ' -to ' + str(end_sec) + ' ' +
 				input_avi, shell=True)
 
 # open up the new files so we can read and write bytes to them
@@ -122,7 +129,7 @@ i_frame_yet = False
 
 for index, frame in enumerate(frames):
 
-	if  i_frame_yet == False or index < int(start_sec * fps) or index > int(end_sec * fps):
+	if  i_frame_yet == False or index < int(start_effect_sec * fps) or index > int(end_effect_sec * fps):
 		# the split above removed the end of frame signal so we put it back in
 		out_file.write(frame + bytes.fromhex('30306463'))
 
@@ -146,7 +153,8 @@ out_file.close()
 subprocess.call('ffmpeg -loglevel error -y -i ' + output_avi + ' ' +
 				' -crf 18 -pix_fmt yuv420p -vcodec libx264 -acodec aac -r ' + str(fps) + ' ' +
 				' -vf "scale=' + str(output_width) + ':-2:flags=lanczos" ' + ' ' +
-				' -t ' + str(output_length) + ' ' +	output_video, shell=True)
+				#' -ss ' + str(start_sec) + ' -to ' + str(end_sec) + ' ' +
+				output_video, shell=True)
 
 # gets rid of the in-between files so they're not crudding up your system
 os.remove(input_avi)
